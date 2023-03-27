@@ -1,0 +1,13 @@
+* {
+  scrollbar-width: thin;
+  /* scrollbar-color: #4c5960 #2a3942; */
+}
+
+*::-webkit-scrollbar {
+  width: 12px;
+}
+
+*::-webkit-scrollbar-thumb {
+  /* background-color: #374045; */
+  border-radius: 30px;
+}

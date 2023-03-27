@@ -1,0 +1,36 @@
+@import url("https://fonts.googleapis.com/css2?family=Work+Sans:wght@300&display=swap");
+
+body {
+  /* color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%; */
+}
+
+.underline-mod {
+  position: relative;
+  top: -1px;
+  margin: 0 auto;
+  width: 60px;
+  height: 5px;
+  background-color: #646cff;
+  border-radius: 5px;
+}
+
+.viewIcon {
+  top: 41px;
+  right: 10px;
+  position: absolute;
+  font-size: 23px;
+  cursor: pointer;
+  z-index: 4;
+}
+
+#inp-password {
+  padding-right: 42px;
+}
