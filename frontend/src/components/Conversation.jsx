@@ -222,7 +222,7 @@ const Conversation = ({ socket, chatId }) => {
                   <PopoverArrow />
                   <PopoverBody>
                     <Box>
-                      <HStack
+                      {/* <HStack
                         color={"#4795f3"}
                         _hover={{
                           bgColor: "#dddddd97",
@@ -234,7 +234,7 @@ const Conversation = ({ socket, chatId }) => {
                       >
                         <BiInfoCircle fontSize={"md"} />
                         <span>Info</span>
-                      </HStack>
+                      </HStack> */}
                       <HStack
                         color={"red"}
                         _hover={{
