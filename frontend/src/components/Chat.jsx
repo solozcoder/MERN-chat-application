@@ -403,9 +403,29 @@ const Chat = ({ socket }) => {
         })}
       </Box>
       {isMobileScreen2 && (
-        <Box display={"block"} width={"100%"} height={"94vh"}>
-          {getUserId.length > 0 && (
+        <Box
+          display={"block"}
+          width={"100%"}
+          height={"94vh"}
+          borderRadius={"3px"}
+        >
+          {getUserId.length > 0 ? (
             <Conversation socket={socket} chatId={getUserId} />
+          ) : (
+            <VStack
+              alignContent={"center"}
+              justifyContent={"center"}
+              position={"relative"}
+              m={15}
+              height={"100%"}
+              border={"1px solid #ccc"}
+              borderRadius={"3px"}
+              margin={"0 auto"}
+            >
+              <Text fontSize={"2xl"}>
+                No Chat Displayed, Search User or Click someone.
+              </Text>
+            </VStack>
           )}
         </Box>
       )}
