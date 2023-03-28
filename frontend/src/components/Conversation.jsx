@@ -48,36 +48,19 @@ import { BiBlock, BiTrash, BiInfoCircle } from "react-icons/bi";
 import ScrollableFeed from "react-scrollable-feed";
 import UserLastOnline from "./UserLastOnline";
 
-// import "./../assets/css/chatContainer.scss";
-
 const Conversation = ({ socket, chatId }) => {
-  // if (!chatId) return "";
   const { user, setUser } = useAuthContext();
   const { userId } = useParams();
   const [getUserChat, setUserChat] = useState({});
   const [getAllChat, setAllChat] = useState([]);
 
-  const [bottomState, setBottomState] = useState(true);
   const scrollRef = useRef();
+  const messageInpRef = useRef();
 
   const [isMobileScreen2] = useMediaQuery("(min-width: 768px)");
 
-  // const [getMessage, setMessage] = useState([]);
-  const [getLastOnline, setLastOnline] = useState("");
-
-  const messageInpRef = useRef();
-
   const navigate = useNavigate();
   var getUrl = !userId ? chatId : userId;
-
-  const [getUserParams, setUserParams] = useState(false);
-
-  // console.log(chatId);
-  // useEffect(() => {
-  //   if (getUrl) {
-  //     setUserParams(getUrl);
-  //   }
-  // }, [chatId.length > 0]);
 
   if (!getUrl) {
     return (
@@ -87,14 +70,9 @@ const Conversation = ({ socket, chatId }) => {
     );
   }
 
-  // const sendMessageIO = () => {
-  //   socket.emit("sendMessage", { from_user: user._id, userId, messageInpRef.current.value });
-  // };
-
   // Fetch all chat
   useEffect(() => {
     const controller = new AbortController();
-    // console.log("clicked");
 
     axios({
       url: `http://localhost:5000/api/chat/${getUrl}`,
@@ -127,11 +105,6 @@ const Conversation = ({ socket, chatId }) => {
 
   useEffect(() => {
     socket.on("receiveMessage", (data) => {
-      // data = data.chat;
-      // let allChat = getAllChat;
-      // allChat.push(data.chat);
-      console.log(data);
-
       setAllChat(data.chat);
     });
   }, [socket, getAllChat]);
@@ -163,14 +136,7 @@ const Conversation = ({ socket, chatId }) => {
   };
 
   return (
-    <Box
-      // padding={0}
-      // margin={0}
-      display={"block"}
-      position={"relative"}
-      mr={5}
-      height={"100%"}
-    >
+    <Box display={"block"} position={"relative"} mr={5} height={"100%"}>
       <HStack
         padding={"12px"}
         position={"relative"}
@@ -235,7 +201,7 @@ const Conversation = ({ socket, chatId }) => {
                         <BiInfoCircle fontSize={"md"} />
                         <span>Info</span>
                       </HStack> */}
-                      <HStack
+                      {/* <HStack
                         color={"red"}
                         _hover={{
                           bgColor: "#dddddd97",
@@ -247,7 +213,7 @@ const Conversation = ({ socket, chatId }) => {
                       >
                         <BiBlock fontSize={"md"} />
                         <span>Block User's</span>
-                      </HStack>
+                      </HStack> */}
                       <HStack
                         color={"red"}
                         _hover={{
@@ -257,6 +223,9 @@ const Conversation = ({ socket, chatId }) => {
                         p={2}
                         borderRadius={"8px"}
                         cursor={"pointer"}
+                        onClick={() =>
+                          deleteUserMessage(userId._id, getUserChat._id)
+                        }
                       >
                         <BiTrash fontSize={"md"} />
                         <span>Delete Message's</span>
@@ -270,7 +239,6 @@ const Conversation = ({ socket, chatId }) => {
         )}
       </HStack>
 
-      {/* maxHeight={"86vh"} */}
       <Stack paddingBottom={"50px"} mt={3} maxHeight={"83vh"}>
         <ScrollableFeed ref={scrollRef}>
           {getAllChat.map((userChat, index) => (
@@ -377,42 +345,11 @@ const Conversation = ({ socket, chatId }) => {
           onClick={sendMessage}
         />
       </HStack>
-      {/* <HStack
-        position={"fixed"}
-        bottom={"30px"}
-        minWidth={"100%"}
-        backgroundColor={"white"}
-        zIndex={2}
-        padding={"10px"}
-        borderTop={"1px solid #cccc"}
-      >
-        
-      </HStack> */}
     </Box>
   );
 };
 
 {
-  /* <Stack>
-  {Object.keys(getUserChat).length > 0 &&
-    getUserChat.chat.map((userChat, index) => {
-      if (userChat.sender._id !== user._id) {
-        return (
-          <Box key={index + 1} bgColor={"white"}>
-            <p>{userChat.message}</p>
-            <small>{userChat.timestamp}</small>
-          </Box>
-        );
-      } else {
-        return (
-          <Box key={index + 1} bgColor={"#caffc4"}>
-            <p>{userChat.message}</p>
-            <small>{userChat.timestamp}</small>
-          </Box>
-        );
-      }
-    })}
-</Stack>; */
 }
 
 export default Conversation;

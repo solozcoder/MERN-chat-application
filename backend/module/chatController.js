@@ -216,18 +216,6 @@ const fetchChatById = asyncHandler(async (req, res) => {
       }
     }
   }
-  // if (!getChatId) {
-  //   const createChat = await Chats.create({
-  //     for: findUser,
-  //     users: [req.user._id, userId],
-  //     chat: [],
-  //     sender: req.user,
-  //     lastestChat: "",
-  //   });
-  //   return res.json(createChat);
-  // }
-
-  // for(var i=0)
 
   return res.json({ getUserChat: getUser, getMessageUser: chatArr });
 });
@@ -308,6 +296,18 @@ const sendChat = asyncHandler(async (req, res) => {
   return res.status(200).json(userChat);
 });
 
+// const deleteAllMessage = asyncHandler(async (req, res) => {
+//   var { targetUserId } = req.body;
+
+//   var getChatId = await Chats.findOne({
+//     $and: [
+//       { users: { $elemMatch: { $eq: req.user._id } } },
+//       { users: { $elemMatch: { $eq: targetUserId } } },
+//     ],
+//   });
+
+//   getChatId = getChatId.chat.filter((chat) => chat.sender._id );
+// })
 // const fetchChat = asyncHandler(async (req, res) => {
 //   var getChat = await Chats.find({
 //     users: { $elemMatch: { $eq: req.user._id } },
