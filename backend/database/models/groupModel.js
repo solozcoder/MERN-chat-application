@@ -2,9 +2,10 @@ const mongoose = require("mongoose");
 
 const messageModel = mongoose.Schema(
   {
-    sender: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    content: { type: String, trim: true },
-    chat: { type: mongoose.Schema.Types.ObjectId, ref: "Chat" },
+    groupName: { type: String },
+    groupAdmin: { type: Array },
+    groupPerson: [{ type: mongoose.Schema.Types.ObjectId, ref: "person" }],
+    lastestChat: { type: String },
   },
   { timestamps: true }
 );

@@ -10,15 +10,17 @@ import { Routes, Route, Link, Navigate, useParams } from "react-router-dom";
 import "./assets/css/App.css";
 
 // component
-import Chat from "./components/Chat";
-import ProtectedRoute from "./components/ProtectedRoute";
+// import ProtectedRoute from "./components/ProtectedRoute";
 import axios from "axios";
-import { useAuthContext } from "./hooks/authHook";
+import Chat from "./components/Chat";
 import AuthUser from "./components/Authentication/Index";
 import Conversation from "./components/Conversation";
 
 // Socket
 import io from "socket.io-client";
+// import { useSocketContext } from "./pages/hooks/socket-hooks";
+import { SocketProvider } from "./pages/hooks/context-manager/socket-context";
+import { useAuthContext } from "./pages/hooks/user-hooks";
 
 // const socket = io.connect("/");
 
@@ -30,13 +32,14 @@ const socket = io("http://localhost:5000", {
 
 function App() {
   const { user, setUser } = useAuthContext();
+  // const socket = useSocketContext();
   // const [socket, setSocket] = useState(null);
 
-  useEffect(() => {
-    if (user) {
-      socket.emit("setup", user);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (user) {
+  //     socket.emit("setup", user);
+  //   }
+  // }, []);
 
   // const asdf = useMemo(() => {
 
@@ -100,30 +103,36 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <Routes>
-        <Route
-          path="/"
-          element={
-            user ? <Chat socket={socket} /> : <Navigate to="/authentication" />
-          }
-        />
-        <Route
-          path="/authentication"
-          element={!user ? <AuthUser /> : <Navigate to="/" />}
-        />
-        <Route
-          path="/chat/:userId"
-          element={
-            user ? (
-              <Conversation socket={socket} />
-            ) : (
-              <Navigate to="/authentication" />
-            )
-          }
-        />
-      </Routes>
-    </div>
+    <SocketProvider>
+      <div className="App">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              user ? (
+                <Chat socket={socket} />
+              ) : (
+                <Navigate to="/authentication" />
+              )
+            }
+          />
+          <Route
+            path="/authentication"
+            element={!user ? <AuthUser /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/chat/:userId"
+            element={
+              user ? (
+                <Conversation socket={socket} />
+              ) : (
+                <Navigate to="/authentication" />
+              )
+            }
+          />
+        </Routes>
+      </div>
+    </SocketProvider>
   );
 }
 

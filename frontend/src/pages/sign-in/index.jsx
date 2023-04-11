@@ -6,15 +6,9 @@ import { useState, useRef, useEffect } from "react";
 import { useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useAuthContext } from "../../hooks/authHook";
-// import {
-//   useGetUserQuery,
-//   usePostLoginMutation,
-// } from "../../redux/slice/AuthSlice";
+import { useAuthContext } from "../hooks/user-hooks";
 
-// import { useHistory } from "react-router-dom";
-
-const Login = () => {
+const SignIn = () => {
   const [show, setShow] = useState(false);
   const toast = useToast();
 
@@ -23,8 +17,6 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  // const [data, setData] = useState("");
-  // const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { user, setUser } = useAuthContext();
 
@@ -59,7 +51,9 @@ const Login = () => {
         JSON.stringify(fetchLogin.data.userAuth)
       );
       setLoading(false);
-      navigate("/");
+      navigate("/", {
+        replace: true,
+      });
     } catch (err) {
       toast({
         title: "Error Occured!",
@@ -116,7 +110,7 @@ const Login = () => {
         onClick={LoginHandler}
         isLoading={loading}
       >
-        Login
+        Sign In
       </Button>
       <Button
         variant="outline"
@@ -127,10 +121,10 @@ const Login = () => {
           PasswordRef.current.value = "123456";
         }}
       >
-        Admin Credentials Login
+        Admin Credentials
       </Button>
     </VStack>
   );
 };
 
-export default Login;
+export default SignIn;

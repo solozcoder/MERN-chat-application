@@ -8,12 +8,11 @@ import {
   Tab,
   TabPanel,
 } from "@chakra-ui/react";
-// import { useAuthContext } from "../../hooks/authHook";
 
-import Login from "./Login";
-import Register from "./Register";
+import SignIn from "../../pages/sign-in";
+import SignUp from "../../pages/sign-up";
 
-const AuthUser = () => {
+const MainAuth = () => {
   return (
     <Container maxW="xl" centerContent>
       <Box
@@ -33,17 +32,17 @@ const AuthUser = () => {
       <Box bg="white" w="100%" p={4} borderRadius="lg" borderWidth="1px">
         <Tabs variant="enclosed">
           <TabList mb="1em">
-            <Tab>Login</Tab>
-            <Tab>Register</Tab>
+            <Tab>SignIn</Tab>
+            <Tab>SignUp</Tab>
           </TabList>
 
           <TabPanels>
             <TabPanel>
-              <Login />
+              <SignIn />
             </TabPanel>
 
             <TabPanel>
-              <Register />
+              <SignUp />
             </TabPanel>
           </TabPanels>
         </Tabs>
@@ -52,4 +51,4 @@ const AuthUser = () => {
   );
 };
 
-export default AuthUser;
+export default MainAuth;

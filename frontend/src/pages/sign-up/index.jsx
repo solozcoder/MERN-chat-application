@@ -6,9 +6,8 @@ import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import { useHistory } from "react-router";
 
-const Register = () => {
+const SignUp = () => {
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const handleClick = () =>
@@ -16,7 +15,6 @@ const Register = () => {
       return !prev;
     });
   const toast = useToast();
-  // const history = useHistory();
 
   const usernameRef = useRef();
   const emailRef = useRef();
@@ -159,4 +157,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default SignUp;

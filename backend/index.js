@@ -13,8 +13,9 @@ const {
 
 const {
   sendChat,
-  fetchChat,
-  fetchChatById,
+  getFriendChat,
+  getChatByRoomId,
+  getRoomById,
 } = require("./module/chatController");
 
 const {
@@ -44,6 +45,8 @@ var port = process.env.PORT || 5000;
 const socket = require("socket.io");
 const Users = require("./database/models/userModel");
 const Chats = require("./database/models/chatModel");
+const ChatRoom = require("./database/models/chatRoom");
+const { verifyUser } = require("./module/verifyUser");
 
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -62,8 +65,9 @@ app.get("/", (req, res) => {
 });
 
 // Chat
-app.get("/api/chat", AuthUser, fetchChat);
-app.get("/api/chat/:userId", AuthUser, fetchChatById);
+app.get("/api/chat/getFriend", AuthUser, getFriendChat);
+app.get("/api/chatroom/:roomId", AuthUser, getRoomById);
+app.get("/api/chat/:chatId", AuthUser, getChatByRoomId);
 app.post("/api/chat", AuthUser, sendChat);
 
 // User
@@ -81,9 +85,6 @@ app.post("/api/auth", AuthUser);
 
 // app.put("/group/add-user/:id", AuthUser, addUserGroup);
 // app.delete("/group/remove-user/:id", AuthUser, removeUserGroup);
-
-// Error handler
-app.use(ErrorHandler);
 
 // app.post("/auth/signin", SignInAuth);
 // app.post("/auth/user", SignInAuth);
@@ -104,110 +105,24 @@ database.getConnection((err) => {
     },
   });
 
-  // (async () => {
-  //   console.log("asd");
-  //   await Chats.updateMany(
-  //     {},
-  //     {
-  //       $set: {
-  //         chat: "",
-  //       },
-  //     }
-  //   );
-  // })();
-
+  var users = [];
   io.on("connection", (socket) => {
-    socket.on("setup", async (data) => {
+    socket.on("setup", (data) => {
       socket.join(data._id);
-      // console.log(data);
-
-      // Set Status online
-      await Users.findOneAndUpdate(
-        { _id: data._id },
-        {
-          status: {
-            isOnline: true,
-            lastOnline: new Date().getTime(),
-          },
-        },
-        {
-          new: true,
-        }
-      );
-      socket.broadcast.emit("userConnected", {
-        _id: data._id,
-        username: data.username,
-        email: data.email,
-        picture: data.picture,
-        status: {
-          isOnline: true,
-          lastOnline: new Date().getTime(),
-        },
-      });
-      // console.log(data.username + " join to server");
     });
 
+    // Catch user send message
     socket.on("sendMessage", async (data) => {
-      const { _id, sender, message } = data;
-      // console.log(data);
+      const { chatId, userId, sender, message } = data;
 
-      var findUser = await Users.findOne({
-        _id,
-      }).select("-password -createdAt -updatedAt -__v");
-
-      if (!findUser) {
-        throw Error("Cannot find user's!");
-      } else if (!message) {
-        throw Error("Error blank message's!");
-      }
-
-      var getChatId = await Chats.findOne({
-        $and: [
-          { users: { $elemMatch: { $eq: sender._id } } },
-          { users: { $elemMatch: { $eq: _id } } },
-        ],
-      });
-      var lastestChat = `${sender.username}: ${message}`;
-      var getCurrentTime = new Date().getTime();
-      var chat = {
-        chatId: genId,
+      socket.to(userId).emit("receiveMessage", {
+        chatId,
         sender,
         message,
-        timestamp: getCurrentTime,
-      };
-
-      var createChat = {};
-
-      if (!getChatId) {
-        // Create Chat
-        createChat = await Chats.create({
-          for: [sender, findUser],
-          users: [sender._id, _id],
-          chat: [chat],
-          lastestChat,
-        });
-      } else {
-        // Update Chat
-        createChat = await Chats.findOneAndUpdate(
-          { _id: getChatId._id },
-          {
-            $push: {
-              chat,
-            },
-            lastestChat,
-          },
-          {
-            new: true,
-          }
-        );
-      }
-
-      // data._id = createChat._id;
-      data.timestamp = getCurrentTime;
-      socket.to(_id).emit("receiveMessage", createChat);
-      // socket.in(_id)
+      });
     });
-
-    // socket.on("disconnect", () => {});
   });
 });
+
+// Error handler
+// app.use(ErrorHandler);
