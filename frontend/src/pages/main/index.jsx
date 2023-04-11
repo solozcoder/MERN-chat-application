@@ -7,10 +7,6 @@ import { useAuthContext } from "../hooks/user-hooks";
 
 const MainIndex = ({ socket }) => {
   const { user, setUser } = useAuthContext();
-  // const socket = useSocketContext();
-  // useEffect(() => {
-  //   if (user) socket.emit("setup", user);
-  // }, []);
 
   useEffect(() => {
     socket.on("user_connect", (data) => {

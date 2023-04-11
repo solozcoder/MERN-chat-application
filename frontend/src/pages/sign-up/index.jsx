@@ -56,7 +56,7 @@ const SignUp = () => {
       }
 
       await axios({
-        url: "http://localhost:5000/api/register",
+        url: "/register",
         method: "POST",
         headers: {
           "Content-Type": "application/json",

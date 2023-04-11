@@ -5,7 +5,7 @@ userToken = userToken ? JSON.parse(userToken) : "";
 export const UserApi = createApi({
   reducerPath: "userApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/api",
+    baseUrl: import.meta.env.VITE_API_BASE_URL,
   }),
   tagTypes: ["Users"],
   endpoints: (build) => ({

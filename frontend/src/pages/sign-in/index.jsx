@@ -25,7 +25,7 @@ const SignIn = () => {
       setLoading(true);
 
       const fetchLogin = await axios({
-        url: "http://localhost:5000/api/login",
+        url: "/login",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
